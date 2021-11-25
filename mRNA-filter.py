@@ -1,5 +1,3 @@
-# Usage: reference_mRNA.py [-h] --refflat REFFLAT --fasta-directory FA_DIR --outfile OUT_FILE --fold-change FOLD_CHANGE_TABLE
-
 import sys
 import time
 
