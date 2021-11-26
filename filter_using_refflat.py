@@ -34,8 +34,7 @@ def filterUniqRefSeqID(lstRefSeqs):
     for refSeq in lstRefSeqs:
         dctCountRefSeqID[refSeq.sRefSeqID] += 1
     # end: for refSeq
-    lstUniqRefSeqID = dict(item for item in dctCountRefSeqID.items() if item[1] == 1).keys()
-    lstRefSeqs = [refSeq for refSeq in lstRefSeqs if refSeq.sRefSeqID in lstUniqRefSeqID]
+    lstRefSeqs = [refSeq for refSeq in lstRefSeqs if dctCountRefSeqID[refSeq.sRefSeqID] == 1]
     return lstRefSeqs
 # end: def filterUniqRefSeqID
 
