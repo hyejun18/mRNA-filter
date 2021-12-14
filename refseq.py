@@ -327,8 +327,8 @@ class RefSeq: # needs func. reverseComplement
     # end: def parse_refFlat_line
 
     # for Fasta
-    def __reverse_complement(self): # will be used in parse_fasta_seq
-        self.sExonSeq = self.sExonSeq[::-1].translate(g_dctComplement)
+    def __reverse_complement(self, sSeq): # will be used in parse_fasta_seq
+        return sSeq[::-1].translate(g_dctComplement)
     # end: def __reverse_complement
 
     def __splicing(self, sChrSeq): # will be used in parse_fasta_seq
