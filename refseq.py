@@ -1,28 +1,28 @@
 from global_variables import *
 
-class RefSeq:
+class RefSeq: # needs func. reverseComplement
     def __init__(self):
         # from RefFlat
-        self.__sGeneSym = 'NULL'
-        self.__sRefSeqID = 'NULL'
-        self.__nChrID = 0
-        self.__sStrand = 'NULL'
-        self.__nTxStart = 0
-        self.__nTxEnd = 0
-        self.__nOrfStart = 0
-        self.__nOrfEnd = 0
-        self.__nExonCount = 0
-        self.__lstExonStarts = []
-        self.__lstExonEnds = []
-        self.__nExonSeqSize = 0
-        self.__nOrfSeqSize = 0
-        self.__nUtr5SeqSize = 0
-        self.__nUtr3SeqSize = 0
+        self.__sGeneSym =       'NULL'
+        self.__sRefSeqID =      'NULL'
+        self.__nChrID =         0
+        self.__sStrand =        'NULL'
+        self.__nTxStart =       0
+        self.__nTxEnd =         0
+        self.__nOrfStart =      0
+        self.__nOrfEnd =        0
+        self.__nExonCount =     0
+        self.__lstExonStarts =  []
+        self.__lstExonEnds =    []
+        self.__nExonSeqSize =   0
+        self.__nOrfSeqSize =    0
+        self.__nUtr5SeqSize =   0
+        self.__nUtr3SeqSize =   0
         # from Fasta
-        self.__sExonSeq = 'NULL'
-        self.__sOrfSeq = 'NULL'
-        self.__sUtr5Seq = 'NULL'
-        self.__sUtr3Seq = 'NULL'
+        self.__sExonSeq =       'NULL'
+        self.__sOrfSeq =        'NULL'
+        self.__sUtr5Seq =       'NULL'
+        self.__sUtr3Seq =       'NULL'
     # end: def __init__
 
 
@@ -126,7 +126,7 @@ class RefSeq:
         # Input: chrID can be both int and str such as 'chrN'
         global g_lstChrs
         if chrID.isdecimal():
-            self.nChrID = int(chrID)
+            self.__nChrID = int(chrID)
         elif chrID not in g_lstChrs:
             if not chrID.startswith('chr'):
                 raise ValueError(f'invalid chrID "{chrID}". It should start with "chr".')
@@ -142,7 +142,7 @@ class RefSeq:
 
     @sStrand.setter
     def sStrand(self, strand):
-        assert (strand == '+') or (strand == '-'), f'invalid strand "{strand}"'
+        assert (strand == '+') or (strand == '-'), f'invalid strand sign "{strand}"'
         self.__sStrand = strand
 
     @nTxStart.setter
@@ -286,14 +286,6 @@ class RefSeq:
         return sumOfEnds - sumOfStarts
     # end: def __lastUtrSeqSize
 
-    def __lastExonSeqSize(self):
-        if self.sStrand == '+':
-            lastExonIndex = self.nExonCount-1
-        else:
-            lastExonIndex = 0
-        return self.lstExonEnds[lastExonIndex] - self.lstExonStarts[lastExonIndex]
-    # end: def __lastExonSeqSize
-
 
     ##################################################
     # Methods for parsing
@@ -302,19 +294,24 @@ class RefSeq:
     # for RefFlat
     def parse_refFlat_line(self, sReadLine): # will be used in readRefFlat
         lstField = sReadLine.strip().split('\t')
-        self.sGeneSym = lstField[0]
-        self.sRefSeqID = lstField[1]
-        self.nChrID = lstField[2]
-        self.sStrand = lstField[3]
-        self.nTxStart = lstField[4]
-        self.nTxEnd = lstField[5]
-        self.nOrfStart = lstField[6]
-        self.nOrfEnd = lstField[7]
-        self.nExonCount = lstField[8]
-        self.lstExonStarts = lstField[9]
-        self.lstExonEnds = lstField[10]
-        self.nExonSeqSize = sum(self.lstExonEnds) - sum(self.lstExonStarts)
-        self.nOrfSeqSize = self.__orfSeqSize()
+        ### Schema for refFlat ###
+        # Index		0			1				2		3		4			5			6			7			8			9					10
+        # Field		geneSym		refSeqID		chrom	strand	txStart		txEnd		orfStart	orfEnd		exonCount	exonStarts			exonEnds
+        # Example	FAM138A		NR_026818		chr1	-		34610		36081		36081		36081		3			34610,35276,35720,	35174,35481,36081,
+        assert len(lstField) == 11
+        self.sGeneSym =         lstField[0]
+        self.sRefSeqID =        lstField[1]
+        self.nChrID =           lstField[2] # chromN but setter let chromN be N (int)
+        self.sStrand =          lstField[3]
+        self.nTxStart =         lstField[4]
+        self.nTxEnd =           lstField[5]
+        self.nOrfStart =        lstField[6]
+        self.nOrfEnd =          lstField[7]
+        self.nExonCount =       lstField[8]
+        self.lstExonStarts =    lstField[9]  # comma-separated but setter put them into list
+        self.lstExonEnds =      lstField[10] # comma-separated but setter put them into list
+        self.nExonSeqSize =     sum(self.lstExonEnds) - sum(self.lstExonStarts)
+        self.nOrfSeqSize =      self.__orfSeqSize()
         if self.sStrand == '+':
             self.nUtr5SeqSize, self.nUtr3SeqSize = self.__firstUtrSeqSize(), self.__lastUtrSeqSize()
         else: # for '-' stranded tx
@@ -338,7 +335,7 @@ class RefSeq:
         self.sExonSeq = self.__splicing(sChrSeq).upper()
         # end: for exonStart, exonEnd
         if self.sStrand == '-':
-            self.__reverse_complement()
+            self.sExonSeq = self.__reverse_complement(self.sExonSeq)
         # end: if self.sStrand
 
         nOrfStart = self.nUtr5SeqSize
@@ -383,4 +380,5 @@ class RefSeq:
     def is_NMD_candidate(self):
         return self.nUtr3SeqSize - self.__lastExonSeqSize() > 50
     # end: def is_NMD_candidate
+
 # end: class RefSeq
