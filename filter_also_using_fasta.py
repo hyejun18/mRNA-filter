@@ -52,13 +52,13 @@ def removeWrongOrf(lstRefSeqs):
 def filterMajorTx(lstRefSeqs):
     # Criteria for representative transcripts: the lowest RefSeqID
     lstRefSeqs.sort(key=lambda x: int(x.sRefSeqID[3:]))
-    lstFilteredRefSeqs = []
-    stGeneSym = set()
+    dctRefSeqs = dict()
+    # key: sGeneSym
+    # value: refSeq
     for refSeq in lstRefSeqs:
-        if refSeq.sGeneSym not in stGeneSym:
-            lstFilteredRefSeqs.append(refSeq)
-            stGeneSym.add(refSeq.sGeneSym)
+        if refSeq.sGeneSym not in dctRefSeqs:
+            dctRefSeqs[refSeq.sGeneSym] = refSeq
         # end: if refSeq.sGeneSym
     # end: for refSeq
-    return lstFilteredRefSeqs
+    return list(dctRefSeqs.values())
 # end: def filterMajorTx
