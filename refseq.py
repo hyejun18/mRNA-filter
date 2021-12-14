@@ -1,6 +1,6 @@
 from global_variables import *
 
-class RefSeq:
+class RefSeq: # needs func. reverseComplement
     def __init__(self):
         # from RefFlat
         self.__sGeneSym =       'NULL'
@@ -285,6 +285,14 @@ class RefSeq:
         sumOfStarts = sum(nExonStart for nExonStart in self.lstExonStarts if nExonStart >= self.nOrfEnd) + self.nOrfEnd
         return sumOfEnds - sumOfStarts
     # end: def __lastUtrSeqSize
+
+    def __lastExonSeqSize(self):
+        if self.sStrand == '+':
+            lastExonIndex = self.nExonCount-1
+        else:
+            lastExonIndex = 0
+        return self.lstExonEnds[lastExonIndex] - self.lstExonStarts[lastExonIndex]
+    # end: def __lastExonSeqSize
 
 
     ##################################################
