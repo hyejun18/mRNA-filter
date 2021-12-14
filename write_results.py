@@ -47,8 +47,8 @@ def interimReport(lstEntrySize):
 
 def results(lstEntrySize, lstRefSeqs, fileOut):
     with open(fileOut, 'w') as fOut:
-        for i, nAnswer in enumerate(lstEntrySize):
-            writeTxCount(i + 1, nAnswer, fOut)
+        for i, nAnswer in enumerate(lstEntrySize, 1):
+            writeTxCount(i, nAnswer, fOut)
         # end: for i, lstRefSeqs
         print(file=fOut) # just for empty line
         writeTxList(lstRefSeqs, fOut)
