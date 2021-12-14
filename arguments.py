@@ -27,12 +27,6 @@ def getArgs():
         dest='out_file', 
         help='/path/to/results.txt'
         )
-    parser.add_argument(
-        '--fold-change', '-f', 
-        type=str, 
-        dest='fold_change_table', 
-        help='/path/to/mRNA-fold-change.txt'
-        )
     args = parser.parse_args()
     return args
 # end: def getArgs
