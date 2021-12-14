@@ -1,6 +1,6 @@
 from global_variables import *
 
-class RefSeq: # needs func. reverseComplement
+class RefSeq:
     def __init__(self):
         # from RefFlat
         self.__sGeneSym =       'NULL'
