@@ -20,7 +20,7 @@ g_lstChrs = ['chr' + str(chrNo) for chrNo in list(range(1, 23)) + ['X', 'Y']]
 
 # Complement: A <--> T, G <--> C
 # Dictionary for the Unicode code point
-g_dctComplement = str.maketrans('ACGT', 'TGCA')
+g_dctComplement = str.maketrans('ACGTU', 'TGCAA')
 
 # Codons
 g_sStartCodon = 'ATG'
