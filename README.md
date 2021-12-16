@@ -2,7 +2,9 @@
 Make a set of reference mRNAs: Major isoforms of non-redundant, non-NMD candidates with no wrong ORF
 
 ### Quick Start
+``` Bash
 python3 reference_mRNA.py --refflat REFFLAT --fasta-directory FA_DIR --outfile OUT_FILE
+```
 
 ### Input
 + NCBI RefFlat file, downloaded from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables)
