@@ -3,7 +3,7 @@ Make a set of reference mRNAs: Major isoforms of non-redundant, non-NMD candidat
 
 ### Quick Start
 ``` Bash
-python3 reference_mRNA.py --refflat REFFLAT --fasta-directory FA_DIR --outfile OUT_FILE
+python3 mRNA-filter.py --refflat REFFLAT --fasta-directory FA_DIR --outfile OUT_FILE
 ```
 
 ### Input
